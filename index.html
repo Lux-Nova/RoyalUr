@@ -1,3 +1,4 @@
+<!DOCTYPE HTML>
 <HTML>
   <head>
     <t1>Rafael Alaras:</t1>
@@ -12,15 +13,37 @@
       width="600"
       height="200"
       style="border: 1px solid black"></canvas>
-
+    <br>
     <button id="roll_btn" onclick= "roll_dice()">Roll</button>
     <button id="clear_btn" onclick= "clear_roll()">Clear</button>
     <button id="render_btn" onclick= "render()">Render</button>
+    <select id=piece_sel>
+      <option value=0>Piece 1</option>
+      <option value=1>Piece 2</option>
+      <option value=2>Piece 3</option>
+      <option value=3>Piece 4</option>
+    </select>
+    <select id=move_sel>
+      <option value=1>Move 1</option>
+      <option value=2>Move 2</option>
+      <option value=3>Move 3</option>
+      <option value=4>Move 4</option>
+    </select>
+    <button id="move_btn" onclick= "move()">Move</button>
     <p id="roll_output"></p><br><br>
-
-
-
+    <p id="win_output"></p><br><br>
+    <p id="move_error"></p><br>
+    <p id="check_error"></p><br>
+    <p id="check_error1"></p><br>
+    <p id="check_error2"></p><br>
+    <p id="check_error3"></p><br>
+    <p id="check_error4"></p><br>
     <br>
+
+    <script src = "Board.js"></script>
+    <script src = "Space.js"></script>
+    <script src = "Game.js"></script>
+
   </body>
-  <script src = "game.js"></script>
+
 </HTML>
