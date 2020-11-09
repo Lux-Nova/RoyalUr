@@ -64,7 +64,7 @@ class Space {
       }
     }
     else{
-      if(this.is_empty(!player1)){
+      if(this.is_empty(player1)){
         this.is_player_2 = true;
         this.piece_2 = piece;
       }

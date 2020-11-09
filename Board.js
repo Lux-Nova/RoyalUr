@@ -7,14 +7,14 @@ class Board{
   constructor(length){
     this.board = [];
     for(let i=0; i<length; i++){
-      if(i>=0 && i<=4){
-        this.board[i] = new Space(true, [], [], false, false);
+      if(i>=0 && i<4){
+        this.board[i] = new Space(true, null, null, false, false);
       }
-      else if(i>=5 && i<12){
-        this.board[i] = new Space(false, [], [], false, false);
+      else if(i>=4 && i<12){
+        this.board[i] = new Space(false, null, null, false, false);
       }
       else{
-        this.board[i] = new Space(true, [], [], false, false);
+        this.board[i] = new Space(true, null, null, false, false);
       }
     }
     this.start_player_1 = ['A','B','C','D'];
@@ -23,33 +23,34 @@ class Board{
     this.end_player_2 = [];
   }
 
+  get_start_board(index, player1){
+    if(player1){
+      return(this.start_player_1[index]);
+    }
+    else{
+      return(this.start_player_2[index]);
+    }
+  }
+
   check_board(index, player1){
     let temp = 0;
     for(let cell of this.board){
-      if(player1){
-        if(temp == index){
-          return(!cell.get_player(player1) /*&& (cell.get_player(!player1) || !cell.is_safe())*/);
-        }
+      if(temp == index){
+        return(!cell.get_player(player1));
       }
-      else{
-        if(temp == index){
-          return(!cell.get_player(!player1) /*&& (cell.is_empty(player1) || !cell.is_safe())*/);
-        }
+      if(temp == this.board.length+1){
+        return(true);
       }
       temp++;
     }
+    return(index == this.board.length+1);
   }
 
   get_piece_index(index, player1){
     let temp = 0;
     for(let cell of this.board){
       if(temp == index){
-        if(player1){
-          return(cell.get_piece(player1));
-        }
-        else{
-          return(cell.get_piece(!player1));
-        }
+        return(cell.get_piece(player1));
       }
       temp++;
     }
@@ -59,21 +60,21 @@ class Board{
     let temp = 0;
     for(let cell of this.board){
       if(temp == index){
-        if(cell.is_empty(player1)){
-          if(cell.is_empty(!player1)){
-            cell.add_piece(piece, player1);
-            return;
+        if(cell.is_empty(player1) && !cell.is_safe() && !cell.is_empty(!player1)){
+          let temp_char = cell.get_piece(!player1);
+          cell.remove_piece(!player1);
+          if(!player1){
+            this.start_player_1.push(temp_char);
           }
           else{
-            if(cell.is_safe()){
-              return;
-            }
-            else{
-              cell.remove_piece(!player1);
-              cell.add_piece(piece, player1);
-              return;
-            }
+            this.start_player_2.push(temp_char);
           }
+          cell.add_piece(piece, player1);
+          return;
+        }
+        else{
+          cell.add_piece(piece, player1);
+          return;
         }
       }
       temp++;
@@ -141,17 +142,19 @@ class Board{
   }
 
   find_piece_board(piece, player1){
-    for(let i=0; i<this.board.length; i++){
+    let temp = 0;
+    for(let cell of this.board){
       if(player1){
-        if(piece == this.board[i].piece_1){
-          return(i);
+        if(piece == cell.piece_1){
+          return(temp);
         }
       }
       else{
-        if(piece == this.board[i].piece_2){
-          return(i);
+        if(piece == cell.piece_2){
+          return(temp);
         }
       }
+      temp++;
     }
     return(null);
   }
