@@ -9,7 +9,7 @@ var roll_count;
 var player_1_turn = true;
 var blank_space = '_';
 var null_space = 'X';
-
+var moved_piece = [false, false, false, false];
 
 let model = {
   board :   [
@@ -27,7 +27,13 @@ function move(){
   char_element = this.get_temp_char(piece_select);
   let piece_index = this.set_piece_location(char_element);
   let move_count = Number(document.getElementById("move_sel").value);
-
+  if(moved_piece[piece_select]){
+    document.getElementById("move_error").innerHTML = "Can't move piece twice.";
+    return;
+  }
+  else{
+    moved_piece[piece_select] = true;
+  }
   if(move_count>roll_count){
     document.getElementById("move_error").innerHTML = "Move is greater than roll!";
     return;
@@ -120,6 +126,7 @@ function get_temp_char(select){
 }
 
 function switch_player(){
+  moved_piece = [false, false, false, false];
   player_1_turn = !player_1_turn;
   let temp;
   if(player_1_turn){
@@ -169,6 +176,9 @@ function render(){
     temp = '2';
   }
   document.getElementById("player_turn").innerHTML = "It's Player " + temp + " turn.";
+  document.getElementById("move_error").innerHTML = "";
+  document.getElementById("win_output").innerHTML = "";
+  document.getElementById("check_error").innerHTML = "";
 }
 
 function update(){
@@ -263,4 +273,5 @@ function roll_dice(){
 function clear_roll(){
   roll_count = 0;
   document.getElementById("roll_output").innerHTML = "Roll is: " + roll_count;
+  this.switch_player();
 }
